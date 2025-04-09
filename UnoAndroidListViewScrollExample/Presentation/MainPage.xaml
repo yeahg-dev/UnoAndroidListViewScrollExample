@@ -6,25 +6,29 @@
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:um="using:Uno.Material"
       NavigationCacheMode="Required"
+      utu:SafeArea.Insets="Top, Bottom"
       Background="{ThemeResource BackgroundBrush}">
-  <ScrollViewer>
-    <Grid utu:SafeArea.Insets="VisibleBounds">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-        <RowDefinition />
-      </Grid.RowDefinitions>
-      <utu:NavigationBar Content="{Binding Title}" />
 
-      <StackPanel Grid.Row="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Spacing="16">
-        <TextBox Text="{Binding Name, Mode=TwoWay}"
-            PlaceholderText="Enter your name:" />
-        <Button Content="Go to Second Page"
-            AutomationProperties.AutomationId="SecondPageButton"
-            Command="{Binding GoToSecond}" />
-      </StackPanel>
+  <Grid RowDefinitions="auto,auto,*" RowSpacing="8" Padding="16">
+    <TextBlock HorizontalAlignment="Center">
+      <Run Text="Current Item Count:"/>
+      <Run Text="{Binding CurrentItemCount}"/>
+    </TextBlock>
+
+    <Grid Grid.Row="1" ColumnDefinitions="auto,*,auto" ColumnSpacing="4">
+      <TextBlock Grid.Column="0" Text="Item Count:" VerticalAlignment="Center" TextWrapping="Wrap"/>
+      <TextBox Grid.Column="1"  VerticalAlignment="Center" InputScope="Number" 
+        Text="{Binding ItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+      <Button Grid.Column="2" VerticalAlignment="Center" Content="Update Items" 
+        Command="{Binding UpdateItemsCommand}"/>
     </Grid>
-  </ScrollViewer>
+
+      <ListView Grid.Row="2" x:Name="ListView" ItemsSource="{Binding Items}" Background="Beige">
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="x:String">
+            <TextBlock Text="{Binding .}" Foreground="Black"/>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+  </Grid>
 </Page>
