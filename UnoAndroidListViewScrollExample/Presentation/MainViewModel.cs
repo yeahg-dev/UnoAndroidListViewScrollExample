@@ -1,3 +1,6 @@
+
+using System.Collections.ObjectModel;
+
 namespace UnoAndroidListViewScrollExample.Presentation;
 
 public partial class MainViewModel : ObservableObject
@@ -6,6 +9,15 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private string? name;
+
+    [ObservableProperty]
+    private string? _itemCount;
+
+    [ObservableProperty]
+    private string? _currentItemCount = "0";
+
+    [ObservableProperty]
+    private ObservableCollection<string> _items = [];
 
     public MainViewModel(
         IStringLocalizer localizer,
@@ -16,15 +28,24 @@ public partial class MainViewModel : ObservableObject
         Title = "Main";
         Title += $" - {localizer["ApplicationName"]}";
         Title += $" - {appInfo?.Value?.Environment}";
-        GoToSecond = new AsyncRelayCommand(GoToSecondView);
+        UpdateItemsCommand = new RelayCommand(UpdateItems);
     }
+
     public string? Title { get; }
 
-    public ICommand GoToSecond { get; }
+    public ICommand UpdateItemsCommand { get; }
 
-    private async Task GoToSecondView()
+    private void UpdateItems()
     {
-        await _navigator.NavigateViewModelAsync<SecondViewModel>(this, data: new Entity(Name!));
+        Items.Clear();
+        if (int.TryParse(ItemCount, out int count))
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Items.Add($"Item {i}");
+            }
+        }
+        CurrentItemCount = ItemCount;
+        ItemCount = string.Empty;
     }
-
 }
