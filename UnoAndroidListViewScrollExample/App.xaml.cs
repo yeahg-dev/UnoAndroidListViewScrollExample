@@ -73,8 +73,7 @@ public partial class App : Application
                     // DelegatingHandler will be automatically injected into Refit Client
                     .AddTransient<DelegatingHandler, DebugHttpHandler>()
 #endif
-                    .AddSingleton<IWeatherCache, WeatherCache>()
-                    .AddRefitClient<IApiClient>(context))
+                    .AddSingleton<IWeatherCache, WeatherCache>())
                 .ConfigureServices((context, services) =>
                 {
                     // TODO: Register your services
